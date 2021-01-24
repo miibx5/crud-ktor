@@ -1,1 +1,1 @@
-rootProject.name = "crud-ktor"
+rootProject.name = "crud-ktor-app"

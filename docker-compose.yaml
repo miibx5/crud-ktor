@@ -1,0 +1,40 @@
+version: "3"
+
+networks:
+    app-network:
+
+services:
+    crud-ktor-app:
+        container_name: crud-ktor-app
+        build:
+            context: .
+            dockerfile: DockerFile
+        depends_on:
+            - postgresDB
+        env_file:
+            - .env
+        environment:
+            ENV: docker
+            DATABASE_URL: ${DATABASE_URL}
+        networks:
+            - app-network
+        ports:
+            - 7070:7070
+            - 5070:5070
+        command: java -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5070 -jar crud-ktor-app-*-all.jar
+
+    postgresDB:
+        container_name: crudKtorDB
+        image: library/postgres:12
+        command: [ "-c","max_connections=50" ]
+        env_file:
+            - .env
+        environment:
+            POSTGRES_DB: ${DATABASE}
+            POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+            POSTGRES_ROOT_PASSWORD: ${DATABASE_ROOT_PASSWORD}
+            POSTGRES_USER: ${DATABASE_USER}
+        networks:
+            - app-network
+        ports:
+            - 5432:5432
