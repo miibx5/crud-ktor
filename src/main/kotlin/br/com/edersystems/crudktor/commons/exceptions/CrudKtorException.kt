@@ -10,5 +10,19 @@ Codification.................: UTF-8
 */
 package br.com.edersystems.crudktor.commons.exceptions
 
-class CrudKtorException {
+import br.com.edersystems.crudktor.commons.exceptions.error.ErrorResponse
+import br.com.edersystems.crudktor.commons.extensions.camelToSnakeCase
+import io.ktor.http.HttpStatusCode
+
+abstract class CrudKtorException : RuntimeException() {
+
+    protected val code = javaClass
+        .simpleName
+        .replace("Exception", "")
+        .camelToSnakeCase()
+        .toUpperCase()
+
+    abstract override val message: String
+    abstract fun errorCode(): HttpStatusCode
+    abstract fun response(): ErrorResponse
 }

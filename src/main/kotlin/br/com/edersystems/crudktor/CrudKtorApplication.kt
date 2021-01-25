@@ -10,20 +10,28 @@ Codification.................: UTF-8
 */
 package br.com.edersystems.crudktor
 
+import br.com.edersystems.crudktor.application.exceptions.ExceptionHandler
 import br.com.edersystems.crudktor.application.helloworld.helloWorldModule
 import br.com.edersystems.crudktor.application.helloworld.helloWorldRouter
+import br.com.edersystems.crudktor.application.people.peopleModule
+import br.com.edersystems.crudktor.application.people.peopleRouter
 import br.com.edersystems.crudktor.config.configModule
-import br.com.edersystems.crudktor.config.getServerPort
+import br.com.edersystems.crudktor.config.environments.getServerPort
 import io.ktor.application.Application
+import io.ktor.application.ApplicationStarted
 import io.ktor.application.install
 import io.ktor.features.ContentNegotiation
 import io.ktor.features.DataConversion
+import io.ktor.features.StatusPages
 import io.ktor.http.ContentType
 import io.ktor.jackson.JacksonConverter
 import io.ktor.routing.routing
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
 import io.ktor.server.netty.NettyApplicationEngine
+import javax.sql.DataSource
+import org.flywaydb.core.Flyway
+import org.jetbrains.exposed.sql.Database
 import org.koin.ktor.ext.Koin
 import org.koin.ktor.ext.get
 
@@ -48,7 +56,8 @@ fun Application.mainModule(testing: Boolean = false) {
     install(Koin) {
         val modules = listOf(
             configModule,
-            helloWorldModule
+            helloWorldModule,
+            peopleModule
         )
         modules(modules)
     }
@@ -61,16 +70,18 @@ fun Application.mainModule(testing: Boolean = false) {
 
     routing {
         helloWorldRouter(get())
-//        install(StatusPages) {
-//            exception<AuthenticationException> { cause ->
-//                call.respond(HttpStatusCode.Unauthorized)
-//            }
-//            exception<AuthorizationException> { cause ->
-//                call.respond(HttpStatusCode.Forbidden)
-//            }
-//        }
+        peopleRouter(get())
+
+        install(StatusPages) { ExceptionHandler.handle(this) }
+    }
+    environment.monitor.subscribe(ApplicationStarted) {
+        startDatabase(get())
     }
 }
 
-class AuthenticationException : RuntimeException()
-class AuthorizationException : RuntimeException()
+private fun startDatabase(dataSource: DataSource) {
+    Database.connect(dataSource)
+    val flyway = Flyway.configure().dataSource(dataSource).load()
+    flyway.clean()
+    flyway.migrate()
+}

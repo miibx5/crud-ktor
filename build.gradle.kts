@@ -43,6 +43,9 @@ dependencies {
     implementation("org.jetbrains.exposed:exposed-java-time:$exposedVersion")
     implementation("org.postgresql:postgresql:$jdbcPostgresVersion")
 
+    // HTTP Client
+    implementation("com.github.kittinunf.fuel:fuel:$fuelVersion")
+
     //Kotlin
     kotlin("kotlin-bom")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion")
@@ -67,6 +70,7 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter-api:$junitJupiterVersion")
     testImplementation("org.junit.jupiter:junit-jupiter-engine:$junitJupiterVersion")
     testImplementation("org.testcontainers:junit-jupiter:$testContainersVersion")
+    testImplementation("org.testcontainers:postgresql:$testContainersVersion")
     testImplementation("org.koin:koin-test:$koinVersion")
     testImplementation("io.ktor:ktor-server-tests:$ktorVersion")
     testImplementation("io.mockk:mockk:$mockkVersion")

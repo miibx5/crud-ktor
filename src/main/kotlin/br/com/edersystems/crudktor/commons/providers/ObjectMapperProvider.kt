@@ -8,7 +8,7 @@ Codification.................: UTF-8
  Éder L. Costa - © Copyright 2021 - All Rights Reserved
 ...........................................................
 */
-package br.com.edersystems.crudktor.commons.extensions
+package br.com.edersystems.crudktor.commons.providers
 
 import br.com.edersystems.crudktor.config.jackson.localdate.LocalDateDeserializer
 import br.com.edersystems.crudktor.config.jackson.localdate.LocalDateSerializer

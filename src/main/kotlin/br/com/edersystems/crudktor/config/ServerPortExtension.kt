@@ -10,10 +10,7 @@ Codification.................: UTF-8
 */
 package br.com.edersystems.crudktor.config
 
-import com.typesafe.config.ConfigFactory
-import io.ktor.config.HoconApplicationConfig
-
-fun getServerPort(): Int {
-    val envConfig = HoconApplicationConfig(ConfigFactory.load())
-    return envConfig.property("server.port").getString().toInt()
-}
+//fun getServerPort(): Int {
+//    val envConfig = HoconApplicationConfig(ConfigFactory.load())
+//    return envConfig.property("server.port").getString().toInt()
+//}

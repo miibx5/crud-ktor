@@ -10,5 +10,16 @@ Codification.................: UTF-8
 */
 package br.com.edersystems.crudktor.commons.exceptions.error
 
-class ErrorResponse {
+class ErrorResponse private constructor(
+    val code: String,
+    val errors: MutableMap<String, Any>
+) {
+    companion object {
+        fun create(code: String) = ErrorResponse(
+            code = code,
+            errors = mutableMapOf()
+        )
+    }
+
+    fun addError(key: String, value: Any) = this.apply { errors[key] = value }
 }

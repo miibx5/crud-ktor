@@ -10,11 +10,19 @@ Codification.................: UTF-8
 */
 package br.com.edersystems.crudktor.config
 
-import br.com.edersystems.crudktor.commons.extensions.ObjectMapperProvider
+import br.com.edersystems.crudktor.commons.providers.DataSourceProvider
+import br.com.edersystems.crudktor.commons.providers.ObjectMapperProvider
+import br.com.edersystems.crudktor.config.environments.EnvironmentConfig
 import com.typesafe.config.ConfigFactory
+import javax.sql.DataSource
 import org.koin.dsl.module
 
 val configModule = module {
     single { EnvironmentConfig(ConfigFactory.load()) }
     single { ObjectMapperProvider.provide() }
+    single<DataSource> {
+        with(get<EnvironmentConfig>()) {
+            DataSourceProvider.provide(databaseUrl, databaseUser, databasePassword)
+        }
+    }
 }
