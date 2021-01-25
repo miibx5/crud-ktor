@@ -21,7 +21,6 @@ import io.ktor.application.Application
 import io.ktor.application.ApplicationStarted
 import io.ktor.application.install
 import io.ktor.features.ContentNegotiation
-import io.ktor.features.DataConversion
 import io.ktor.features.StatusPages
 import io.ktor.http.ContentType
 import io.ktor.jackson.JacksonConverter
@@ -69,13 +68,13 @@ fun Application.mainModule(testing: Boolean = false) {
         register(ContentType.Application.Json, JacksonConverter(get()))
     }
 
-    install(DataConversion)
+    install(StatusPages) { ExceptionHandler.handle(this) }
 
     routing {
         helloWorldRouter(get())
         peopleRouter(get())
+        // install(StatusPages) { ExceptionHandler.handle(this) }
 
-        install(StatusPages) { ExceptionHandler.handle(this) }
     }
     environment.monitor.subscribe(ApplicationStarted) {
         startDatabase(get())

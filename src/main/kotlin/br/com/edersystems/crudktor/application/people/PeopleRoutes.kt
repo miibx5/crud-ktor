@@ -16,9 +16,9 @@ import io.ktor.routing.post
 import io.ktor.routing.route
 
 fun Routing.peopleRouter(controller: PeopleController) {
-
     route("/person") {
-        post { controller.create(call) }
+        post {
+            controller.create(call)
+        }
     }
-    
 }

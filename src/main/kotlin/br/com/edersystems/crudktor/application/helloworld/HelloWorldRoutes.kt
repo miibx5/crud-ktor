@@ -11,16 +11,12 @@ Codification.................: UTF-8
 package br.com.edersystems.crudktor.application.helloworld
 
 import io.ktor.application.call
-import io.ktor.http.ContentType
 import io.ktor.routing.Routing
-import io.ktor.routing.accept
 import io.ktor.routing.get
 import io.ktor.routing.route
 
 fun Routing.helloWorldRouter(controller: HelloWorldController) {
-    accept(ContentType.Application.Json) {
-        route("/hello") {
-            get { controller.getHelloWorld(call) }
-        }
+    route("/hello") {
+        get { controller.getHelloWorld(call) }
     }
 }

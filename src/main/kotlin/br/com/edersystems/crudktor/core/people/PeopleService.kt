@@ -10,7 +10,6 @@ Codification.................: UTF-8
 */
 package br.com.edersystems.crudktor.core.people
 
-import br.com.edersystems.crudktor.commons.providers.ObjectMapperProvider
 import br.com.edersystems.crudktor.core.people.domain.Person
 import br.com.edersystems.crudktor.core.people.ports.PeopleRepository
 import br.com.edersystems.crudktor.core.people.ports.dto.PersonDTO
@@ -18,8 +17,6 @@ import br.com.edersystems.crudktor.core.people.ports.dto.PersonDTO
 class PeopleService(private val repository: PeopleRepository) {
 
     fun create(personDTO: PersonDTO): Person {
-        val personCreated = repository.create(Person.create(personDTO))
-        println("\n PERSON SAVED: ${ObjectMapperProvider.provide().writeValueAsString(personCreated)}\n")
-        return personCreated
+        return repository.create(Person.create(personDTO))
     }
 }

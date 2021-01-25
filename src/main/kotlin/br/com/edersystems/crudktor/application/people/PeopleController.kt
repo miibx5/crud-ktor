@@ -13,8 +13,8 @@ package br.com.edersystems.crudktor.application.people
 import br.com.edersystems.crudktor.application.extensions.receiveUTF8Text
 import br.com.edersystems.crudktor.application.people.request.PersonRequest
 import br.com.edersystems.crudktor.application.people.response.PersonResponse
+import br.com.edersystems.crudktor.commons.providers.ObjectMapperProvider
 import br.com.edersystems.crudktor.core.people.PeopleService
-import br.com.edersystems.crudktor.core.people.domain.Person
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.ktor.application.ApplicationCall
 import io.ktor.http.HttpStatusCode
@@ -30,9 +30,13 @@ class PeopleController(
 
         val request = mapper.readValue(jsonRequest, PersonRequest::class.java)
 
-        val personCreated: Person = service.create(request.toPersonDTO())
+        val personCreated = service.create(request.toPersonDTO())
 
-        call.respond(HttpStatusCode.Created, PersonResponse.create(personCreated))
+        val personToReturn = mapper.writeValueAsString(PersonResponse.create(personCreated))
+
+        println("\n PERSON SAVED: ${ObjectMapperProvider.provide().writeValueAsString(personCreated)}\n")
+
+        call.respond(HttpStatusCode.Created, personToReturn)
     }
 
 }
