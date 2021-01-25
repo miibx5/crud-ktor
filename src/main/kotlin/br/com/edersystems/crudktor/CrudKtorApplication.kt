@@ -32,6 +32,7 @@ import io.ktor.server.netty.NettyApplicationEngine
 import javax.sql.DataSource
 import org.flywaydb.core.Flyway
 import org.jetbrains.exposed.sql.Database
+import org.koin.core.logger.PrintLogger
 import org.koin.ktor.ext.Koin
 import org.koin.ktor.ext.get
 
@@ -60,6 +61,8 @@ fun Application.mainModule(testing: Boolean = false) {
             peopleModule
         )
         modules(modules)
+
+        logger(PrintLogger())
     }
 
     install(ContentNegotiation) {
