@@ -11,20 +11,32 @@ Codification.................: UTF-8
 package br.com.edersystems.crudktor.application.people.response
 
 import br.com.edersystems.crudktor.core.people.domain.Person
+import com.fasterxml.jackson.annotation.JsonProperty
 import java.time.LocalDate
 import java.util.UUID
 
 data class PersonResponse private constructor(
+    @JsonProperty("id")
     private val id: UUID,
+    @JsonProperty("active")
     private val active: Boolean,
+    @JsonProperty("birth_date")
     private val birthDate: LocalDate,
+    @JsonProperty("email")
     private val email: String,
+    @JsonProperty("gender")
     private val gender: String,
+    @JsonProperty("first_name")
     private val firstName: String,
+    @JsonProperty("last_name")
     private val lastName: String,
+    @JsonProperty("addresses")
     private val addresses: List<AddressResponse>,
+    @JsonProperty("documents")
     private val documents: List<DocumentResponse>,
+    @JsonProperty("phones")
     private val phones: List<PhoneResponse>,
+    @JsonProperty("type")
     private val type: String
 ) {
     companion object {

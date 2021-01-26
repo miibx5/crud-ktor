@@ -12,6 +12,7 @@ package br.com.edersystems.crudktor.config.containers
 
 import br.com.edersystems.crudktor.config.environments.getDatabase
 import br.com.edersystems.crudktor.config.environments.getDatabasePassword
+import br.com.edersystems.crudktor.config.environments.getDatabaseUrl
 import br.com.edersystems.crudktor.config.environments.getDatabaseUser
 import java.sql.DriverManager
 import org.testcontainers.containers.FixedHostPortGenericContainer
@@ -22,18 +23,17 @@ object PostgresContainer {
     internal class Container(imageName: String) : FixedHostPortGenericContainer<Container>(imageName)
     // internal class Container(imageName: String) : PostgreSQLContainer<Container>(imageName)
 
-
-    private val postgresDB = getDatabase()
-    private val postgresUser = getDatabaseUser()
-    private val postgresPassword = getDatabasePassword()
+    private val database = getDatabase()
+    private val databaseUrl = getDatabaseUrl()
+    private val databaseUser = getDatabaseUser()
+    private val databasePassword = getDatabasePassword()
 
     private val container by lazy {
-        Container("postgres:12-alpine")
+        Container("postgres:11-alpine")
             .withFixedExposedPort(5434, 5432)
-            .withEnv("POSTGRES_DB", postgresDB)
-            .withEnv("POSTGRES_USER", postgresUser)
-            .withEnv("POSTGRES_PASSWORD", postgresPassword)
-            .withCommand("-c max_connections=200")
+            .withEnv("POSTGRES_DB", database)
+            .withEnv("POSTGRES_USER", databaseUser)
+            .withEnv("POSTGRES_PASSWORD", databasePassword)
             .waitingFor(Wait.forLogMessage(".*database system is ready to accept connections.*\\n", 1))
 
     }
@@ -67,11 +67,10 @@ object PostgresContainer {
     }
 
     private fun waitingTillPostgresIsReady() {
-        val jdbcUrl = "jdbc:postgresql://localhost:5434/$postgresDB"
         var connected = false
 
         while (!connected) {
-            runCatching { DriverManager.getConnection(jdbcUrl, postgresUser, postgresPassword) }
+            runCatching { DriverManager.getConnection(databaseUrl, databaseUser, databasePassword) }
                 .onSuccess {
                     connected = true
                     it.close()

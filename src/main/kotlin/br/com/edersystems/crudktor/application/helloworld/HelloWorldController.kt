@@ -11,6 +11,7 @@ Codification.................: UTF-8
 package br.com.edersystems.crudktor.application.helloworld
 
 import br.com.edersystems.crudktor.application.helloworld.response.HelloWorldResponse
+import br.com.edersystems.crudktor.application.response.Response
 import br.com.edersystems.crudktor.core.helloworld.HelloWorldService
 import io.ktor.application.ApplicationCall
 import io.ktor.http.HttpStatusCode
@@ -20,6 +21,9 @@ class HelloWorldController(private val service: HelloWorldService) {
 
     suspend fun getHelloWorld(call: ApplicationCall) {
         val helloWorld = service.getHelloWorld()
-        call.respond(HttpStatusCode.OK, HelloWorldResponse.create(helloWorld))
+        
+        val response = Response.create(HttpStatusCode.OK.value, HelloWorldResponse.create(helloWorld))
+
+        call.respond(HttpStatusCode.OK, response)
     }
 }

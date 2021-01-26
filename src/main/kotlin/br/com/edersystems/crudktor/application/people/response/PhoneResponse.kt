@@ -11,12 +11,17 @@ Codification.................: UTF-8
 package br.com.edersystems.crudktor.application.people.response
 
 import br.com.edersystems.crudktor.core.people.phones.domain.Phone
+import com.fasterxml.jackson.annotation.JsonProperty
 
 
 data class PhoneResponse private constructor(
+    @JsonProperty("ddd")
     val ddd: String,
+    @JsonProperty("ddi")
     val ddi: String,
+    @JsonProperty("number")
     val number: String,
+    @JsonProperty("type")
     val type: String
 ) {
 

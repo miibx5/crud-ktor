@@ -12,14 +12,12 @@ package br.com.edersystems.crudktor.commons.exceptions.error
 
 class ErrorResponse private constructor(
     val code: String,
-    val errors: MutableMap<String, Any>
+    val message: String
 ) {
     companion object {
-        fun create(code: String) = ErrorResponse(
+        fun create(code: String, message: String) = ErrorResponse(
             code = code,
-            errors = mutableMapOf()
+            message = message
         )
     }
-
-    fun addError(key: String, value: Any) = this.apply { errors[key] = value }
 }

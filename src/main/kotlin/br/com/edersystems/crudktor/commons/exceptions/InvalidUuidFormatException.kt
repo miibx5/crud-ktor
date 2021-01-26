@@ -10,14 +10,15 @@ Codification.................: UTF-8
 */
 package br.com.edersystems.crudktor.commons.exceptions
 
-import br.com.edersystems.crudktor.commons.exceptions.error.ErrorResponse
+import br.com.edersystems.crudktor.commons.exceptions.error.ErrorResponseOrchestrator
 import io.ktor.http.HttpStatusCode
 
 class InvalidUuidFormatException(private val uuidValue: String) : CrudKtorException() {
-    
+
     override val message = "Invalid UUID format. It was not possible to parse value $uuidValue to UUID"
 
-    override fun response() = ErrorResponse.create(code).addError("invalid_value", uuidValue)
+    override fun response() =
+        ErrorResponseOrchestrator.createError(HttpStatusCode.BadRequest.value.toString(), message)
 
-    override fun errorCode() = HttpStatusCode.BadRequest
+    override fun status() = HttpStatusCode.BadRequest
 }

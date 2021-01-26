@@ -24,3 +24,7 @@ fun String.camelToSnakeCase() = this
 
 fun String.toUUID(): UUID = runCatching { UUID.fromString(this) }
     .getOrElse { throw InvalidUuidFormatException(this) }
+
+fun String.removeExtraWhiteSpaces() = this
+    .trim()
+    .replace(" +".toRegex(), " ")

@@ -11,14 +11,15 @@ Codification.................: UTF-8
 package br.com.edersystems.crudktor.core.exceptions
 
 import br.com.edersystems.crudktor.commons.exceptions.CrudKtorException
-import br.com.edersystems.crudktor.commons.exceptions.error.ErrorResponse
+import br.com.edersystems.crudktor.commons.exceptions.error.ErrorResponseOrchestrator
 import io.ktor.http.HttpStatusCode
 
 class CountryNotFoundException(private val country: String) : CrudKtorException() {
 
     override val message = "Country $country not found"
 
-    override fun response() = ErrorResponse.create(code).addError("personType", country)
+    override fun response() = ErrorResponseOrchestrator
+        .createError(HttpStatusCode.BadRequest.value.toString(), message)
 
-    override fun errorCode() = HttpStatusCode.NotFound
+    override fun status() = HttpStatusCode.NotFound
 }

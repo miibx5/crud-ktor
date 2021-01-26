@@ -25,10 +25,8 @@ object ExceptionHandler {
 
     private fun handleException(handler: StatusPages.Configuration) = handler.exception<CrudKtorException> {
 
-        logger.warn("Application throws exception. Code: ${it.errorCode()} - Errors: ${it.response()}", it)
+        logger.warn("Application throws exception. Code: ${it.status()} - Errors: ${it.response()}", it)
 
-        call.respond(it.errorCode(), it.response())
+        call.respond(it.status(), it.response())
     }
-
-
 }

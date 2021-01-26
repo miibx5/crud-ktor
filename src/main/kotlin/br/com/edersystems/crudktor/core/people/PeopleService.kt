@@ -10,13 +10,19 @@ Codification.................: UTF-8
 */
 package br.com.edersystems.crudktor.core.people
 
+import br.com.edersystems.crudktor.core.exceptions.PersonNotFoundException
 import br.com.edersystems.crudktor.core.people.domain.Person
 import br.com.edersystems.crudktor.core.people.ports.PeopleRepository
 import br.com.edersystems.crudktor.core.people.ports.dto.PersonDTO
+import java.util.UUID
 
 class PeopleService(private val repository: PeopleRepository) {
 
     fun create(personDTO: PersonDTO): Person {
         return repository.create(Person.create(personDTO))
+    }
+
+    fun getById(personId: UUID): Person {
+        return repository.findById(personId) ?: throw PersonNotFoundException(personId)
     }
 }

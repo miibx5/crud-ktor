@@ -11,9 +11,12 @@ Codification.................: UTF-8
 package br.com.edersystems.crudktor.application.people.response
 
 import br.com.edersystems.crudktor.core.people.documents.domain.Document
+import com.fasterxml.jackson.annotation.JsonProperty
 
 data class DocumentResponse private constructor(
+    @JsonProperty("number")
     private val number: String,
+    @JsonProperty("type")
     private val type: String
 ) {
     companion object {

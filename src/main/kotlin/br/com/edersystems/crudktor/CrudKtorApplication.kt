@@ -68,14 +68,14 @@ fun Application.mainModule(testing: Boolean = false) {
         register(ContentType.Application.Json, JacksonConverter(get()))
     }
 
-    install(StatusPages) { ExceptionHandler.handle(this) }
+    //install(StatusPages) { ExceptionHandler.handle(this) }
 
     routing {
-        helloWorldRouter(get())
-        peopleRouter(get())
-        // install(StatusPages) { ExceptionHandler.handle(this) }
-
+        helloWorldRouter(controller = get())
+        peopleRouter(controller = get())
+        install(StatusPages) { ExceptionHandler.handle(this) }
     }
+
     environment.monitor.subscribe(ApplicationStarted) {
         startDatabase(get())
     }
