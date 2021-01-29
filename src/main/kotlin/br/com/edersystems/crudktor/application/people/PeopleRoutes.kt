@@ -10,19 +10,23 @@ Codification.................: UTF-8
 */
 package br.com.edersystems.crudktor.application.people
 
+import br.com.edersystems.crudktor.application.exceptions.ContentType
 import io.ktor.application.call
 import io.ktor.routing.Routing
+import io.ktor.routing.accept
 import io.ktor.routing.get
 import io.ktor.routing.post
 import io.ktor.routing.route
 
 fun Routing.peopleRouter(controller: PeopleController) {
-    route("/person") {
-        get("/{id}") {
-            controller.getById(call)
-        }
-        post {
-            controller.create(call)
+    accept(ContentType.json) {
+        route("/person") {
+            get("/{id}") {
+                return@get controller.getById(call)
+            }
+            post {
+                return@post controller.create(call)
+            }
         }
     }
 }

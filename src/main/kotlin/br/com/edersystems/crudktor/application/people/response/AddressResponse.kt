@@ -11,27 +11,17 @@ Codification.................: UTF-8
 package br.com.edersystems.crudktor.application.people.response
 
 import br.com.edersystems.crudktor.core.people.addresses.domain.Address
-import com.fasterxml.jackson.annotation.JsonProperty
 
 data class AddressResponse private constructor(
-    @JsonProperty("public_place")
-    private val publicPlace: String,
-    @JsonProperty("address")
-    private val address: String,
-    @JsonProperty("neighborhood")
-    private val neighborhood: String,
-    @JsonProperty("number")
-    private val number: Int,
-    @JsonProperty("county")
-    private val county: String,
-    @JsonProperty("state")
-    private val state: String,
-    @JsonProperty("country")
-    private val country: String,
-    @JsonProperty("postal_code")
-    private val postalCode: String,
-    @JsonProperty("type")
-    private val type: String
+    val publicPlace: String,
+    val address: String,
+    val neighborhood: String,
+    val number: Int,
+    val county: String,
+    val state: String,
+    val country: String,
+    val postalCode: String,
+    val type: String
 ) {
     companion object {
         fun create(address: Address) = AddressResponse(

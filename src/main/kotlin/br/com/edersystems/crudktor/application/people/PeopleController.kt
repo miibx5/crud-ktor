@@ -36,7 +36,6 @@ class PeopleController(
         val response = getPersonResponse(personToReturn)
 
         call.respond(HttpStatusCode.OK, response)
-        //call.respond(HttpStatusCode.OK, "Funciona merda")
     }
 
     suspend fun create(call: ApplicationCall) {
@@ -48,6 +47,8 @@ class PeopleController(
         val personCreated = service.create(request.toPersonDTO())
 
         val response = getPersonResponse(personCreated)
+
+        println("\nresponse:\n$response\n")
 
         call.respond(HttpStatusCode.Created, response)
     }

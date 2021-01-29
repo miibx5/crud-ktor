@@ -1,0 +1,50 @@
+{
+    "code": 200,
+    "data": {
+        "id": "8d43265d-88bb-44d4-bdf7-ae402575c753",
+        "active": true,
+        "birth_date": "1991-07-05",
+        "email": "leticiaisabellybaptista__leticiaisabellybaptista@aulicinobastos.com.br",
+        "gender": "FEMALE",
+        "first_name": "Letícia Isabelly",
+        "last_name": "Baptista",
+        "addresses": [
+            {
+                "public_place": "STREET",
+                "address": "Elias Acras",
+                "neighborhood": "Jardim Celeste",
+                "number": 494,
+                "county": "São Paulo",
+                "state": "SP",
+                "country": "BRAZIL",
+                "postal_code": "05527060",
+                "type": "RESIDENTIAL"
+            }
+        ],
+        "documents": [
+            {
+                "number": "31270611887",
+                "type": "CPF"
+            },
+            {
+                "number": "459253591",
+                "type": "RG"
+            }
+        ],
+        "phones": [
+            {
+                "ddd": "11",
+                "ddi": "55",
+                "number": "981692535",
+                "type": "MOBILE"
+            },
+            {
+                "ddd": "11",
+                "ddi": "55",
+                "number": "38399905",
+                "type": "RESIDENTIAL"
+            }
+        ],
+        "type": "PHYSICAL"
+    }
+}

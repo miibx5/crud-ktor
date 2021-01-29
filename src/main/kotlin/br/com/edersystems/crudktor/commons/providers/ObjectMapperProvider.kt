@@ -51,7 +51,7 @@ object ObjectMapperProvider {
 
         enable(SerializationFeature.INDENT_OUTPUT)
         enable(DeserializationFeature.FAIL_ON_NULL_FOR_PRIMITIVES)
-        enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY)
+        // enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY)
 
         disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
         disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)

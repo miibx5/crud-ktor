@@ -10,22 +10,50 @@ Codification.................: UTF-8
 */
 package br.com.edersystems.crudktor
 
-
-import io.ktor.http.HttpMethod
+import br.com.edersystems.crudktor.application.people.request.PersonRequest
+import br.com.edersystems.crudktor.application.people.response.PersonResponse
+import br.com.edersystems.crudktor.application.response.Response
+import br.com.edersystems.crudktor.commons.extensions.readJson
+import br.com.edersystems.crudktor.commons.providers.ObjectMapperProvider
+import br.com.edersystems.crudktor.core.people.domain.Person
 import io.ktor.http.HttpStatusCode
-import io.ktor.server.testing.handleRequest
-import io.ktor.server.testing.withTestApplication
-import kotlin.test.Test
-import kotlin.test.assertEquals
+import java.time.LocalDateTime
+import java.util.UUID
 
-class CrudKtorApplicationTest {
-    @Test
-    fun testRoot() {
-        withTestApplication({ mainModule(testing = true) }) {
-            handleRequest(HttpMethod.Get, "/").apply {
-                assertEquals(HttpStatusCode.OK, response.status())
-                assertEquals("HELLO WORLD!", response.content)
+fun main() {
+    val mapper = ObjectMapperProvider.provide()
+    val json = readJson("people/leticia")
+    val request = mapper.readValue(json, PersonRequest::class.java)
+    println(request)
+    val person = Person.create(request.toPersonDTO()).apply {
+        id = UUID.randomUUID()
+        createdAt = LocalDateTime.now()
+        updatedAt = createdAt
+        addresses.forEach {
+            it.apply {
+                id = UUID.randomUUID()
+                createdAt = LocalDateTime.now()
+                updatedAt = createdAt
+            }
+        }
+        documents.forEach {
+            it.apply {
+                id = UUID.randomUUID()
+                createdAt = LocalDateTime.now()
+                updatedAt = createdAt
+            }
+        }
+        phones.forEach {
+            it.apply {
+                id = UUID.randomUUID()
+                createdAt = LocalDateTime.now()
+                updatedAt = createdAt
             }
         }
     }
+    val personResponse = PersonResponse.create(person)
+    println(personResponse)
+
+    val response = mapper.writeValueAsString(Response.create(HttpStatusCode.OK.value, personResponse))
+    println(response)
 }
