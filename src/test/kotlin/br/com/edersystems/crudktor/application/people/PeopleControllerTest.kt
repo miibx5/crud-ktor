@@ -10,11 +10,11 @@ Codification.................: UTF-8
 */
 package br.com.edersystems.crudktor.application.people
 
-import br.com.edersystems.crudktor.application.extension.baseUrl
 import br.com.edersystems.crudktor.application.people.request.PersonRequest
 import br.com.edersystems.crudktor.commons.client.FuelHttpClientMethod
 import br.com.edersystems.crudktor.commons.extensions.readJson
 import br.com.edersystems.crudktor.commons.providers.ObjectMapperProvider
+import br.com.edersystems.crudktor.config.environments.baseUrl
 import br.com.edersystems.crudktor.config.integration.IntegrationTest
 import br.com.edersystems.crudktor.core.people.domain.Person
 import br.com.edersystems.crudktor.infrastructure.people.PeopleRepositoryAdapter

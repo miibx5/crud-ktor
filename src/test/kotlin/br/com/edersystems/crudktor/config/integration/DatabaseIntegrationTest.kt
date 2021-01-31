@@ -12,9 +12,9 @@ package br.com.edersystems.crudktor.config.integration
 
 import br.com.edersystems.crudktor.commons.providers.DataSourceProvider
 import br.com.edersystems.crudktor.config.containers.PostgresContainer
-import br.com.edersystems.crudktor.config.environments.getDatabasePassword
-import br.com.edersystems.crudktor.config.environments.getDatabaseUrl
-import br.com.edersystems.crudktor.config.environments.getDatabaseUser
+import br.com.edersystems.crudktor.config.environments.dbPassword
+import br.com.edersystems.crudktor.config.environments.dbUrl
+import br.com.edersystems.crudktor.config.environments.dbUser
 import br.com.edersystems.crudktor.config.util.DatabaseTestUtils
 import org.flywaydb.core.Flyway
 import org.jetbrains.exposed.sql.Database
@@ -25,9 +25,9 @@ import org.junit.jupiter.api.extension.ExtensionContext.Store.CloseableResource
 
 class DatabaseIntegrationTest : BeforeAllCallback, CloseableResource, BeforeEachCallback {
 
-    private val jdbcUrl = getDatabaseUrl()
-    private val databasePassword = getDatabasePassword()
-    private val databaseUsername = getDatabaseUser()
+    private val jdbcUrl = dbUrl
+    private val databasePassword = dbPassword
+    private val databaseUsername = dbUser
 
     private val dataSource by lazy { DataSourceProvider.provide(jdbcUrl, databaseUsername, databasePassword) }
     private val databaseTestUtils by lazy { DatabaseTestUtils(jdbcUrl, databaseUsername, databasePassword) }

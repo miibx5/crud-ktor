@@ -10,10 +10,10 @@ Codification.................: UTF-8
 */
 package br.com.edersystems.crudktor.config.containers
 
-import br.com.edersystems.crudktor.config.environments.getDatabase
-import br.com.edersystems.crudktor.config.environments.getDatabasePassword
-import br.com.edersystems.crudktor.config.environments.getDatabaseUrl
-import br.com.edersystems.crudktor.config.environments.getDatabaseUser
+import br.com.edersystems.crudktor.config.environments.databaseName
+import br.com.edersystems.crudktor.config.environments.dbPassword
+import br.com.edersystems.crudktor.config.environments.dbUrl
+import br.com.edersystems.crudktor.config.environments.dbUser
 import java.sql.DriverManager
 import org.testcontainers.containers.FixedHostPortGenericContainer
 import org.testcontainers.containers.wait.strategy.Wait
@@ -23,10 +23,10 @@ object PostgresContainer {
     internal class Container(imageName: String) : FixedHostPortGenericContainer<Container>(imageName)
     // internal class Container(imageName: String) : PostgreSQLContainer<Container>(imageName)
 
-    private val database = getDatabase()
-    private val databaseUrl = getDatabaseUrl()
-    private val databaseUser = getDatabaseUser()
-    private val databasePassword = getDatabasePassword()
+    private val database = databaseName
+    private val databaseUrl = dbUrl
+    private val databaseUser = dbUser
+    private val databasePassword = dbPassword
 
     private val container by lazy {
         Container("postgres:11-alpine")
@@ -48,8 +48,7 @@ object PostgresContainer {
             waitingTillPostgresIsReady()
 
             isRunning = true
-        }
-        else {
+        } else {
             println("Postgres wasn't started because it is already running")
         }
     }
@@ -60,8 +59,7 @@ object PostgresContainer {
 
             container.stop()
             isRunning = false
-        }
-        else {
+        } else {
             println("Postgres wasn't stopped because it is not running")
         }
     }

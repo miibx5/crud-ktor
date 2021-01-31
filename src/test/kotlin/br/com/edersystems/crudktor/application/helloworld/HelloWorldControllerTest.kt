@@ -10,9 +10,9 @@ Codification.................: UTF-8
 */
 package br.com.edersystems.crudktor.application.helloworld
 
-import br.com.edersystems.crudktor.application.extension.baseUrl
 import br.com.edersystems.crudktor.commons.client.FuelHttpClientMethod
 import br.com.edersystems.crudktor.commons.extensions.readJson
+import br.com.edersystems.crudktor.config.environments.baseUrl
 import br.com.edersystems.crudktor.config.integration.IntegrationTest
 import io.ktor.http.HttpStatusCode
 import net.javacrumbs.jsonunit.assertj.JsonAssertions.assertThatJson

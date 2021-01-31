@@ -11,7 +11,7 @@ Codification.................: UTF-8
 package br.com.edersystems.crudktor.config.containers
 
 import br.com.edersystems.crudktor.CrudKtorApplication
-import br.com.edersystems.crudktor.config.environments.getServerPort
+import br.com.edersystems.crudktor.config.environments.serverPort
 import io.ktor.server.netty.NettyApplicationEngine
 
 object ApplicationContainer {
@@ -24,10 +24,9 @@ object ApplicationContainer {
             println("Starting application...")
 
 
-            server = CrudKtorApplication.start(getServerPort())
+            server = CrudKtorApplication.start(serverPort)
             isRunning = true
-        }
-        else {
+        } else {
             println("Application wasn't started because it is already running")
         }
     }
@@ -37,8 +36,7 @@ object ApplicationContainer {
             println("Stopping application...")
             server.stop(5, 10)
             isRunning = false
-        }
-        else {
+        } else {
             println("Application wasn't stopped because it is not running")
         }
     }

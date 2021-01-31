@@ -16,7 +16,7 @@ import br.com.edersystems.crudktor.application.helloworld.helloWorldRouter
 import br.com.edersystems.crudktor.application.people.peopleModule
 import br.com.edersystems.crudktor.application.people.peopleRouter
 import br.com.edersystems.crudktor.config.configModule
-import br.com.edersystems.crudktor.config.environments.getServerPort
+import br.com.edersystems.crudktor.config.environments.serverPort
 import io.ktor.application.Application
 import io.ktor.application.ApplicationStarted
 import io.ktor.application.install
@@ -37,7 +37,7 @@ import org.koin.ktor.ext.get
 
 fun main() {
 
-    CrudKtorApplication.start(getServerPort())
+    CrudKtorApplication.start(serverPort)
 }
 
 object CrudKtorApplication {
@@ -54,12 +54,12 @@ object CrudKtorApplication {
 fun Application.mainModule(testing: Boolean = false) {
 
     install(Koin) {
-        val modules = listOf(
+        val listOfModules = listOf(
             configModule,
             helloWorldModule,
             peopleModule
         )
-        modules(modules)
+        modules(listOfModules)
 
         logger(PrintLogger())
     }

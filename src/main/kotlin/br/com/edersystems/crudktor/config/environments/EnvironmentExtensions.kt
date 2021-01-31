@@ -13,16 +13,16 @@ package br.com.edersystems.crudktor.config.environments
 import com.typesafe.config.ConfigFactory
 import io.ktor.config.HoconApplicationConfig
 
-fun getEnvironments() = HoconApplicationConfig(ConfigFactory.load())
+val environmentsConfig = HoconApplicationConfig(ConfigFactory.load())
 
-fun getDatabase() = getEnvironments().property("database.name").getString()
+val databaseName = environmentsConfig.property("database.name").getString()
 
-fun getDatabasePassword() = getEnvironments().property("database.password").getString()
+val dbPassword = environmentsConfig.property("database.password").getString()
 
-fun getDatabaseUrl() = getEnvironments().property("database.url").getString()
+val dbUrl = environmentsConfig.property("database.url").getString()
 
-fun getDatabaseUser() = getEnvironments().property("database.username").getString()
+val dbUser = environmentsConfig.property("database.username").getString()
 
-fun getServerPort() = getEnvironments().property("server.port").getString().toInt()
+val serverPort = environmentsConfig.property("server.port").getString().toInt()
 
-
+val baseUrl = "http://127.0.0.1:${serverPort}"
