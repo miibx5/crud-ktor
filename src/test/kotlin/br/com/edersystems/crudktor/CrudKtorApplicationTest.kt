@@ -54,6 +54,6 @@ fun main() {
     val personResponse = PersonResponse.create(person)
     println(personResponse)
 
-    val response = mapper.writeValueAsString(Response.create(HttpStatusCode.OK.value, personResponse))
+    val response = mapper.writeValueAsString(Response.create(HttpStatusCode.OK.description, personResponse))
     println(response)
 }

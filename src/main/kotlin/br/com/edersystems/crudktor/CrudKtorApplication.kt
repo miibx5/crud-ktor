@@ -15,8 +15,8 @@ import br.com.edersystems.crudktor.application.helloworld.helloWorldModule
 import br.com.edersystems.crudktor.application.helloworld.helloWorldRouter
 import br.com.edersystems.crudktor.application.people.peopleModule
 import br.com.edersystems.crudktor.application.people.peopleRouter
-import br.com.edersystems.crudktor.config.configModule
 import br.com.edersystems.crudktor.config.environments.serverPort
+import br.com.edersystems.crudktor.config.modules.configModule
 import io.ktor.application.Application
 import io.ktor.application.ApplicationStarted
 import io.ktor.application.install
@@ -68,11 +68,9 @@ fun Application.mainModule(testing: Boolean = false) {
         register(ContentType.Application.Json, JacksonConverter(get()))
     }
 
-    //install(StatusPages) { ExceptionHandler.handle(this) }
-
     routing {
-        helloWorldRouter(controller = get())
-        peopleRouter(controller = get())
+        helloWorldRouter(get())
+        peopleRouter(get())
         install(StatusPages) { ExceptionHandler.handle(this) }
     }
 

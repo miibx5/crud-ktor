@@ -24,7 +24,7 @@ class PeopleRepositoryAdapter : PeopleRepository {
         person.createdAt = LocalDateTime.now()
         person.updatedAt = person.createdAt
         transaction {
-            PeopleTable.insert { fillColumns(it, person) }
+            PeopleTable.insert { fillPersonColumns(it, person) }
             val lastPerson = getLastInsertedPerson()
             person.apply { id = lastPerson.id }
             person.addresses.forEach {
@@ -43,16 +43,6 @@ class PeopleRepositoryAdapter : PeopleRepository {
         return person
     }
 
-    private fun getLastInsertedPerson(): Person {
-        return transaction {
-            PeopleTable
-                .selectAll()
-                .orderBy(PeopleTable.createdAt, SortOrder.DESC)
-                .map { PeopleTable.toPerson(it) }
-                .first()
-        }
-    }
-
     override fun findById(personId: UUID): Person? {
         return transaction {
             PeopleTable
@@ -63,10 +53,66 @@ class PeopleRepositoryAdapter : PeopleRepository {
                 .map { PeopleTable.toPerson(it) }
                 .firstOrNull()
                 ?.apply {
-                    this.addresses.forEach { it.addOwner(this) }
-                    this.documents.forEach { it.addOwner(this) }
-                    this.phones.forEach { it.addOwner(this) }
+                    this.id?.let {
+                        getAddressesByOwner(it).forEach { address ->
+                            address.addOwner(this)
+                            this.addAddress(address)
+                        }
+
+                        getDocumentsByOwner(it).forEach { document ->
+                            document.addOwner(this)
+                            this.addDocument(document)
+                        }
+
+                        getPhonesByOwner(it).forEach { phone ->
+                            phone.addOwner(this)
+                            this.addPhone(phone)
+                        }
+                    }
                 }
+        }
+    }
+
+    private fun fillPersonColumns(statement: UpdateBuilder<Number>, person: Person) {
+        statement[PeopleTable.active] = person.active
+        statement[PeopleTable.birthDate] = person.birthDate
+        statement[PeopleTable.gender] = person.gender
+        statement[PeopleTable.email] = person.email
+        statement[PeopleTable.firstName] = person.firstName
+        statement[PeopleTable.lastName] = person.lastName
+        statement[PeopleTable.type] = person.type
+        statement[PeopleTable.createdAt] = person.createdAt!!
+        statement[PeopleTable.updatedAt] = person.updatedAt!!
+    }
+
+    private fun getLastInsertedPerson(): Person {
+        return transaction {
+            PeopleTable
+                .selectAll()
+                .orderBy(PeopleTable.createdAt, SortOrder.DESC)
+                .map { PeopleTable.toPerson(it) }
+                .first()
+        }
+    }
+
+    private fun fillAddressColumns(statement: UpdateBuilder<Number>, address: Address) {
+        statement[AddressTable.ownerId] = address.owner!!.id!!
+        statement[AddressTable.address] = address.address
+        statement[AddressTable.publicPlace] = address.publicPlace
+        statement[AddressTable.neighborhood] = address.neighborhood
+        statement[AddressTable.number] = address.number
+        statement[AddressTable.county] = address.county
+        statement[AddressTable.country] = address.country
+        statement[AddressTable.postalCode] = address.postalCode
+        statement[AddressTable.state] = address.state
+        statement[AddressTable.type] = address.type
+        statement[AddressTable.createdAt] = address.createdAt!!
+        statement[AddressTable.updatedAt] = address.updatedAt!!
+    }
+
+    private fun getAddressesByOwner(ownerId: UUID): List<Address> {
+        return transaction {
+            AddressTable.select { AddressTable.ownerId eq ownerId }.map { AddressTable.toAddress(it) }
         }
     }
 
@@ -91,6 +137,27 @@ class PeopleRepositoryAdapter : PeopleRepository {
         }
     }
 
+    private fun updateAddresses(address: Address) {
+        address.updatedAt = LocalDateTime.now()
+        transaction {
+            AddressTable.update({ AddressTable.id eq address.id!! }) { fillAddressColumns(it, address) }
+        }
+    }
+
+    private fun fillDocumentColumns(statement: UpdateBuilder<Number>, document: Document) {
+        statement[DocumentTable.ownerId] = document.owner!!.id!!
+        statement[DocumentTable.type] = document.type
+        statement[DocumentTable.number] = document.number
+        statement[DocumentTable.createdAt] = document.createdAt!!
+        statement[DocumentTable.updatedAt] = document.updatedAt!!
+    }
+
+    private fun getDocumentsByOwner(ownerId: UUID): List<Document> {
+        return transaction {
+            DocumentTable.select { DocumentTable.ownerId eq ownerId }.map { DocumentTable.toDocument(it) }
+        }
+    }
+
     private fun insertDocument(document: Document): Document {
         document.createdAt = LocalDateTime.now()
         document.updatedAt = document.createdAt
@@ -109,6 +176,29 @@ class PeopleRepositoryAdapter : PeopleRepository {
                 .map { DocumentTable.toDocument(it) }
                 .first()
                 .apply { owner?.addDocument(this) }
+        }
+    }
+
+    private fun updateDocument(document: Document) {
+        document.updatedAt = LocalDateTime.now()
+        transaction {
+            DocumentTable.update({ DocumentTable.id eq document.id!! }) { fillDocumentColumns(it, document) }
+        }
+    }
+
+    private fun fillPhoneColumns(statement: UpdateBuilder<Number>, phone: Phone) {
+        statement[PhoneTable.ownerId] = phone.owner!!.id!!
+        statement[PhoneTable.ddd] = phone.ddd
+        statement[PhoneTable.ddi] = phone.ddi
+        statement[PhoneTable.number] = phone.number
+        statement[PhoneTable.type] = phone.type
+        statement[PhoneTable.createdAt] = phone.createdAt!!
+        statement[PhoneTable.updatedAt] = phone.updatedAt!!
+    }
+
+    private fun getPhonesByOwner(ownerId: UUID): List<Phone> {
+        return transaction {
+            PhoneTable.select { PhoneTable.ownerId eq ownerId }.map { PhoneTable.toPhone(it) }
         }
     }
 
@@ -133,71 +223,10 @@ class PeopleRepositoryAdapter : PeopleRepository {
         }
     }
 
-
-    private fun updateAddresses(address: Address) {
-        address.updatedAt = LocalDateTime.now()
-        transaction {
-            AddressTable.update({ AddressTable.id eq address.id!! }) { fillAddressColumns(it, address) }
-        }
-    }
-
-    private fun updateDocument(document: Document) {
-        document.updatedAt = LocalDateTime.now()
-        transaction {
-            DocumentTable.update({ DocumentTable.id eq document.id!! }) { fillDocumentColumns(it, document) }
-        }
-    }
-
     private fun updatePhone(phone: Phone) {
         phone.updatedAt = LocalDateTime.now()
         transaction {
             PhoneTable.update({ PhoneTable.id eq phone.id!! }) { fillPhoneColumns(it, phone) }
         }
-    }
-
-
-    private fun fillColumns(statement: UpdateBuilder<Number>, person: Person) {
-        statement[PeopleTable.active] = person.active
-        statement[PeopleTable.birthDate] = person.birthDate
-        statement[PeopleTable.gender] = person.gender
-        statement[PeopleTable.email] = person.email
-        statement[PeopleTable.firstName] = person.firstName
-        statement[PeopleTable.lastName] = person.lastName
-        statement[PeopleTable.type] = person.type
-        statement[PeopleTable.createdAt] = person.createdAt!!
-        statement[PeopleTable.updatedAt] = person.updatedAt!!
-    }
-
-    private fun fillAddressColumns(statement: UpdateBuilder<Number>, address: Address) {
-        statement[AddressTable.ownerId] = address.owner!!.id!!
-        statement[AddressTable.address] = address.address
-        statement[AddressTable.publicPlace] = address.publicPlace
-        statement[AddressTable.neighborhood] = address.neighborhood
-        statement[AddressTable.number] = address.number
-        statement[AddressTable.county] = address.county
-        statement[AddressTable.country] = address.country
-        statement[AddressTable.postalCode] = address.postalCode
-        statement[AddressTable.state] = address.state
-        statement[AddressTable.type] = address.type
-        statement[AddressTable.createdAt] = address.createdAt!!
-        statement[AddressTable.updatedAt] = address.updatedAt!!
-    }
-
-    private fun fillDocumentColumns(statement: UpdateBuilder<Number>, document: Document) {
-        statement[DocumentTable.ownerId] = document.owner!!.id!!
-        statement[DocumentTable.type] = document.type
-        statement[DocumentTable.number] = document.number
-        statement[DocumentTable.createdAt] = document.createdAt!!
-        statement[DocumentTable.updatedAt] = document.updatedAt!!
-    }
-
-    private fun fillPhoneColumns(statement: UpdateBuilder<Number>, phone: Phone) {
-        statement[PhoneTable.ownerId] = phone.owner!!.id!!
-        statement[PhoneTable.ddd] = phone.ddd
-        statement[PhoneTable.ddi] = phone.ddi
-        statement[PhoneTable.number] = phone.number
-        statement[PhoneTable.type] = phone.type
-        statement[DocumentTable.createdAt] = phone.createdAt!!
-        statement[DocumentTable.updatedAt] = phone.updatedAt!!
     }
 }

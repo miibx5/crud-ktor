@@ -1,6 +1,6 @@
 {
-    "code": 200,
-    "data": {
-        "message": "HELLO WORLD!!!"
-    }
+  "code": "OK",
+  "data": {
+    "message": "HELLO WORLD!!!"
+  }
 }

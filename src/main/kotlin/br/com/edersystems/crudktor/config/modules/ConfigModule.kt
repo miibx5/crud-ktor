@@ -8,7 +8,7 @@ Codification.................: UTF-8
  Éder L. Costa - © Copyright 2021 - All Rights Reserved
 ...........................................................
 */
-package br.com.edersystems.crudktor.config
+package br.com.edersystems.crudktor.config.modules
 
 import br.com.edersystems.crudktor.commons.providers.DataSourceProvider
 import br.com.edersystems.crudktor.commons.providers.ObjectMapperProvider

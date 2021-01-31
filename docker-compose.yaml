@@ -1,5 +1,8 @@
 version: "3.9"
 
+networks:
+    app-network:
+
 services:
     crud-ktor-app:
         container_name: crud-ktor-app
@@ -13,6 +16,8 @@ services:
         environment:
             ENV: docker
             DATABASE_URL: ${DATABASE_URL}
+        networks:
+            - app-network
         ports:
             - 7070:7070
             - 5070:5070
@@ -28,5 +33,7 @@ services:
             POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
             POSTGRES_ROOT_PASSWORD: ${DATABASE_ROOT_PASSWORD}
             POSTGRES_USER: ${DATABASE_USER}
+        networks:
+            - app-network
         ports:
             - 5432:5432

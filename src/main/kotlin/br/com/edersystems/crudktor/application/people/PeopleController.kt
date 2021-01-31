@@ -13,6 +13,7 @@ package br.com.edersystems.crudktor.application.people
 import br.com.edersystems.crudktor.application.extensions.getPersonId
 import br.com.edersystems.crudktor.application.extensions.receiveUTF8Text
 import br.com.edersystems.crudktor.application.people.request.PersonRequest
+import br.com.edersystems.crudktor.application.people.response.CreatedPersonResponse
 import br.com.edersystems.crudktor.application.people.response.PersonResponse
 import br.com.edersystems.crudktor.application.response.Response
 import br.com.edersystems.crudktor.core.people.PeopleService
@@ -46,14 +47,12 @@ class PeopleController(
 
         val personCreated = service.create(request.toPersonDTO())
 
-        val response = getPersonResponse(personCreated)
-
-        println("\nresponse:\n$response\n")
+        val response = Response.create(HttpStatusCode.Created.description, CreatedPersonResponse.create(personCreated))
 
         call.respond(HttpStatusCode.Created, response)
     }
 
     private fun getPersonResponse(person: Person) =
-        Response.create(HttpStatusCode.OK.value, PersonResponse.create(person))
+        Response.create(HttpStatusCode.OK.description, PersonResponse.create(person))
 
 }

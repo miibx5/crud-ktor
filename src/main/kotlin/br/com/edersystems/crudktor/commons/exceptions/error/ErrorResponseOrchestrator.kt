@@ -24,6 +24,6 @@ object ErrorResponseOrchestrator {
     }
 
     private fun buildError(code: String, message: String): Response {
-        return Response.create(code.toInt(), listOf(ErrorResponse.create(code, message)))
+        return Response.create(code, listOf(ErrorResponse.create(code, message)))
     }
 }

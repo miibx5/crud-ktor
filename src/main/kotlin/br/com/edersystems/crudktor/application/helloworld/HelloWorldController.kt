@@ -21,8 +21,8 @@ class HelloWorldController(private val service: HelloWorldService) {
 
     suspend fun getHelloWorld(call: ApplicationCall) {
         val helloWorld = service.getHelloWorld()
-        
-        val response = Response.create(HttpStatusCode.OK.value, HelloWorldResponse.create(helloWorld))
+
+        val response = Response.create(HttpStatusCode.OK.description, HelloWorldResponse.create(helloWorld))
 
         call.respond(HttpStatusCode.OK, response)
     }
