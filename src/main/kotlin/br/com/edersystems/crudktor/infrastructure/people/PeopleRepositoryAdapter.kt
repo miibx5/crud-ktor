@@ -43,6 +43,7 @@ class PeopleRepositoryAdapter : PeopleRepository {
         return person
     }
 
+    // TODO: pesquisar como trabalhar com o resultRow para aproveitar os left's joins e não precisar fazer uma busca externa
     override fun findById(personId: UUID): Person? {
         return transaction {
             PeopleTable
