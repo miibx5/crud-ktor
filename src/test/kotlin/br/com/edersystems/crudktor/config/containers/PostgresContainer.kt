@@ -19,7 +19,7 @@ import org.testcontainers.containers.FixedHostPortGenericContainer
 import org.testcontainers.containers.wait.strategy.Wait
 
 object PostgresContainer {
-
+    // TODO: verificar como é a nova maneira de instanciar o container
     internal class Container(imageName: String) : FixedHostPortGenericContainer<Container>(imageName)
     // internal class Container(imageName: String) : PostgreSQLContainer<Container>(imageName)
 
